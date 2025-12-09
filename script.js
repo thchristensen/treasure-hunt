@@ -198,6 +198,7 @@ function revealClue(clueNumber) {
 
     if (clueNumber >= 2 && !gameState.gridUnlocked){
         unlockGrid();
+        unlockConstellationTab(false);
     }
     
     // Check if there's a next clue (but not the final one)
@@ -288,12 +289,18 @@ function updateRotation(img, display) {
 }
 
 // Unlock constellation tab - it's a reference tool
-function unlockConstellationTab() {
-    gameState.constellationUnlocked = true;
+function unlockConstellationTab(unlocked = true) {
+    gameState.constellationUnlocked = unlocked;
     const constellationBtn = document.querySelector('[data-tab="constellation"]');
+
+    if(unlocked){
     constellationBtn.classList.remove('hidden');
     constellationBtn.classList.add('highlight');
-    //constellationBtn.style.animation = 'pulse 1.5s ease 3';
+    } else {
+    constellationBtn.classList.add('hidden');
+    constellationBtn.classList.remove('highlight');
+    }
+    
 }
 
 function unlockGrid(){
