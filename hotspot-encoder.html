@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotspot Position Encoder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .position-input {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+        input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .output {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+        }
+        .output h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        .code-output {
+            background: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            border: 1px solid #c8e6c9;
+        }
+        .instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .add-btn {
+            background: #2196F3;
+            padding: 8px 20px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .add-btn:hover {
+            background: #0b7dda;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗺️ Hotspot Position Encoder</h1>
+        
+        <div class="instructions">
+            <strong>Instructions:</strong>
+            <ol>
+                <li>Enter the position for each clue (as percentages, e.g., "30%" or just "30")</li>
+                <li>Click "Generate Encoded String"</li>
+                <li>Copy the output and paste it into script.js as the <code>_hd</code> value</li>
+            </ol>
+        </div>
+
+        <div id="positions-container">
+            <div class="position-input">
+                <label>Clue 1:</label>
+                <input type="text" class="top-input" placeholder="Top (e.g., 30%)" value="30%">
+                <input type="text" class="left-input" placeholder="Left (e.g., 20%)" value="20%">
+            </div>
+            
+            <div class="position-input">
+                <label>Clue 2:</label>
+                <input type="text" class="top-input" placeholder="Top (e.g., 45%)" value="45%">
+                <input type="text" class="left-input" placeholder="Left (e.g., 60%)" value="60%">
+            </div>
+            
+            <div class="position-input">
+                <label>Clue 3:</label>
+                <input type="text" class="top-input" placeholder="Top (e.g., 70%)" value="70%">
+                <input type="text" class="left-input" placeholder="Left (e.g., 35%)" value="35%">
+            </div>
+        </div>
+
+        <button class="add-btn" onclick="addPosition()">+ Add Another Clue</button>
+        <button onclick="generateEncoded()">Generate Encoded String</button>
+
+        <div class="output" id="output" style="display: none;">
+            <h3>Encoded Output:</h3>
+            <div class="code-output" id="encoded-output"></div>
+            <p style="margin-top: 15px; color: #666;">
+                Copy this value and replace the <code>_hd</code> variable in <code>script.js</code>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let clueCount = 3;
+
+        function addPosition() {
+            clueCount++;
+            const container = document.getElementById('positions-container');
+            const newPosition = document.createElement('div');
+            newPosition.className = 'position-input';
+            newPosition.innerHTML = `
+                <label>Clue ${clueCount}:</label>
+                <input type="text" class="top-input" placeholder="Top (e.g., 30%)">
+                <input type="text" class="left-input" placeholder="Left (e.g., 20%)">
+            `;
+            container.appendChild(newPosition);
+        }
+
+        function normalizePercent(value) {
+            value = value.trim();
+            if (value.includes('%')) return value;
+            return value + '%';
+        }
+
+        function generateEncoded() {
+            const positions = {};
+            const positionInputs = document.querySelectorAll('.position-input');
+            
+            positionInputs.forEach((input, index) => {
+                const clueNum = index + 1;
+                const top = input.querySelector('.top-input').value;
+                const left = input.querySelector('.left-input').value;
+                
+                if (top && left) {
+                    positions[clueNum] = {
+                        top: normalizePercent(top),
+                        left: normalizePercent(left)
+                    };
+                }
+            });
+
+            if (Object.keys(positions).length === 0) {
+                alert('Please enter at least one position!');
+                return;
+            }
+
+            const jsonString = JSON.stringify(positions);
+            const encoded = btoa(jsonString);
+            
+            document.getElementById('encoded-output').textContent = encoded;
+            document.getElementById('output').style.display = 'block';
+            
+            // Auto-select the output for easy copying
+            const outputElement = document.getElementById('encoded-output');
+            const range = document.createRange();
+            range.selectNode(outputElement);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+        }
+    </script>
+</body>
+</html>

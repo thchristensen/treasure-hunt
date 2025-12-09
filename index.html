@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Treasure Hunt</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        
+        
+        <!-- Tab Navigation -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="map">Map</button>
+                <button class="tab-btn hidden" data-tab="constellation">Constellation</button>
+            </div>
+            
+            <!-- Collected Ornaments Display -->
+            <div class="ornaments-display">
+                <div class="ornament-slot" id="ornament-1">
+                    <div class="ornament-placeholder">?</div>
+                </div>
+                <div class="ornament-slot" id="ornament-2">
+                    <div class="ornament-placeholder">?</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map View -->
+        <div class="tab-content active" id="map">
+            <div class="split-layout">
+                <div class="map-section">
+                    <div class="map-container" id="map-container">
+                        <img src="map.jpg" alt="Treasure Map" class="map-image">
+                        <!-- Hotspots are generated dynamically to prevent easy cheating -->
+                    </div>
+                </div>
+                
+                <div class="clue-section">
+
+                    <!-- Notifications -->
+                    <div class="notification-box" id="notification-display">
+                        <p>Find the first location to begin...</p>
+                    </div>
+                    <!-- Clue Display -->
+                    <div class="clue-box">
+                        <h3>Clues</h3>
+                        <div id="clue-list">
+                            <!-- Clues will be added here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Tracker -->
+        <div class="progress">
+            <p>Clues Found: <span id="clue-count">0</span>/3</p>
+        </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Constellation View -->
+        <div class="tab-content" id="constellation">
+            <div class="split-layout">
+                <div class="map-section">
+                    <div class="constellation-container">
+                        <img src="constellation.jpg" alt="Constellation Map" class="constellation-image" id="constellation-img">
+                        <!-- Overlay the main map at low opacity -->
+                        <img src="map.jpg" alt="Map Overlay" class="map-overlay">
+                    </div>
+                    
+                    
+                </div>
+                
+                <div class="clue-section">
+                    <div class="notification-box" id="constellation-notification">
+                        <p>Perhaps if you rotate the constellation, it will align with the map and reveal a hidden location.</p>
+                    </div>
+
+                    <!-- Rotation Slider -->
+                    <div class="rotation-controls">
+                        <label for="rotation-slider" class="rotation-label">Rotate Constellation:</label>
+                        <input type="range" id="rotation-slider" min="0" max="359" value="0" step="1" class="rotation-slider">
+                        <span class="rotation-display"><span id="rotation-angle">0</span>°</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
