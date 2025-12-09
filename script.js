@@ -7,7 +7,7 @@ const gameState = {
     constellationRotation: 0,
     constellationUnlocked: false,
     gridUnlocked: false,
-    hitRadius: 2,  // Percentage radius for valid clicks (2% of map size)
+    hitRadius: 3,  // Percentage radius for valid clicks (2% of map size)
     collectedOrnaments: [],
     gridSpotlightRadius: 60
 };
@@ -15,7 +15,7 @@ const gameState = {
 // Clue data - customize these for your treasure hunt
 const clues = {
     1: "Count five palm trees north from the lighthouse to find the first treasure.",
-    2: "The Candy Cane shines bright. Study its stars to find the next treasure.",
+    2: "The Candy Cane shines bright. Study its stars upon the marked spots to find the next treasure.",
     3: "From the pier, follow ⭐ then 🔷"
 };
 
