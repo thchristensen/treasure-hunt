@@ -6,6 +6,7 @@ const gameState = {
     totalMapClues: 3,
     constellationRotation: 0,
     constellationUnlocked: false,
+    gridUnlocked: false,
     hitRadius: 2,  // Percentage radius for valid clicks (2% of map size)
     collectedOrnaments: []
 };
@@ -13,14 +14,14 @@ const gameState = {
 // Clue data - customize these for your treasure hunt
 const clues = {
     1: "Count five palm trees north from the lighthouse to find the first treasure.",
-    2: "The Candy Cane guides sailors home. Study its stars to find the next treasure.",
+    2: "The Candy Cane shines bright. Study its stars to find the next treasure.",
     3: "From the pier, follow ⭐ then 🔷"
 };
 
 // Custom notifications for each clue found
 const clueFoundMessages = {
-    1: "Underneath some old coconut husks, you find your next clue, a <strong>constellation map</strong> and a star shaped ornament with an engraving on it...",
-    2: "The stars lead the way! Digging through the sand you find your next clue and a diamond shaped ornament with an engraving on it...",
+    1: "Underneath some coconut husks, you find your next clue, a <strong>constellation map</strong> and a star shaped ornament with an engraving on it...",
+    2: "Digging through the sand you find your next clue and a diamond shaped ornament with an engraving on it...",
     3: "You found the final treasure! Be the first to reply to the Teams message with the message '<b>I found all the treasures!</b>' to win!"
 };
 
@@ -192,6 +193,10 @@ function revealClue(clueNumber) {
     if (clueNumber === 1 && !gameState.constellationUnlocked) {
         unlockConstellationTab();
     }
+
+    if (clueNumber >= 2 && !gameState.gridUnlocked){
+        unlockGrid();
+    }
     
     // Check if there's a next clue (but not the final one)
     if (gameState.currentClue < gameState.totalMapClues) {
@@ -215,12 +220,28 @@ function initRotation() {
     const rotationSlider = document.getElementById('rotation-slider');
     const constellationImg = document.getElementById('constellation-img');
     const rotationDisplay = document.getElementById('rotation-angle');
+    const mapOverlay = document.querySelector('.map-overlay');
     
     if (!rotationSlider) return; // Guard for when elements don't exist
     
+    // Handle slider input for rotation
     rotationSlider.addEventListener('input', () => {
         gameState.constellationRotation = parseInt(rotationSlider.value);
         updateRotation(constellationImg, rotationDisplay);
+    });
+    
+    // Add rotating class when mouse is pressed on slider
+    rotationSlider.addEventListener('mousedown', () => {
+        if (mapOverlay) {
+            mapOverlay.classList.add('rotating');
+        }
+    });
+    
+    // Remove rotating class when mouse is released anywhere
+    document.addEventListener('mouseup', () => {
+        if (mapOverlay) {
+            mapOverlay.classList.remove('rotating');
+        }
     });
 }
 
@@ -236,6 +257,12 @@ function unlockConstellationTab() {
     constellationBtn.classList.remove('hidden');
     constellationBtn.classList.add('highlight');
     //constellationBtn.style.animation = 'pulse 1.5s ease 3';
+}
+
+function unlockGrid(){
+    gameState.gridUnlocked = true;
+    const gridElement = document.querySelector('.map-container');
+    gridElement.classList.add('grid');
 }
 
 // Reveal an ornament in the display

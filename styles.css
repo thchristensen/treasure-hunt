@@ -23,7 +23,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: min(1200px, 80vw);
     margin: 0 auto;
 }
 
@@ -186,6 +186,10 @@ grid-template-columns: 1fr 400px;
     flex-direction: column;
 }
 
+.map-container{
+    cursor: crosshair;
+}
+
 /* Map Container */
 .map-container,
 .constellation-container {
@@ -194,7 +198,6 @@ grid-template-columns: 1fr 400px;
     border: 3px solid #43788a;
     border-radius: 10px;
     overflow: hidden;
-    cursor: crosshair;
 }
 
 .map-image,
@@ -204,8 +207,27 @@ grid-template-columns: 1fr 400px;
     display: block;
 }
 
+.map-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('grid.png');
+    background-size: cover;
+    pointer-events: none;
+    z-index: 1;
+    opacity:0;
+    transition: opacity 0.3s ease;
+}
+.map-container.grid::after {
+    opacity:1;
+}
+
 .constellation-image {
-    transition: transform 0.3s ease;
+    transition: transform 0.1s ease;
+    opacity:0.8;
 }
 
 /* Map Overlay on Constellation */
@@ -215,9 +237,14 @@ grid-template-columns: 1fr 400px;
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.2;
+    opacity:0.1;
     pointer-events: none;
     z-index: 1;
+    transition: opacity 0.3s ease;
+}
+
+.rotating{
+    opacity:0.6;
 }
 
 /* Rotation Controls with Slider */
@@ -333,6 +360,8 @@ grid-template-columns: 1fr 400px;
         transform: translateX(-50%) translateY(-10px);
     }
 }
+
+
 
 /* Clue Display Box */
 .clue-box {
