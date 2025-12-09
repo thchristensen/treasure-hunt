@@ -340,7 +340,7 @@ function updateProgress() {
     
     // Update total display
     const progressText = document.querySelector('.progress p');
-    progressText.innerHTML = `Clues Found: <span id="clue-count">${totalFound}</span>/${totalClues}`;
+    progressText.innerHTML = `Treasures Found: <span id="clue-count">${totalFound}</span>/${totalClues}`;
 }
 
 // Victory celebration effect
