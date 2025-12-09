@@ -8,7 +8,8 @@ const gameState = {
     constellationUnlocked: false,
     gridUnlocked: false,
     hitRadius: 2,  // Percentage radius for valid clicks (2% of map size)
-    collectedOrnaments: []
+    collectedOrnaments: [],
+    gridSpotlightRadius: 60
 };
 
 // Clue data - customize these for your treasure hunt
@@ -58,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTabs();
     initMapClicks();
     initRotation();
+    initGridSpotlight();
     startGame();
 });
 
@@ -242,6 +244,41 @@ function initRotation() {
         if (mapOverlay) {
             mapOverlay.classList.remove('rotating');
         }
+    });
+}
+
+function initGridSpotlight() {
+    const mapContainer = document.getElementById('map-container');
+    const radiusSlider = document.getElementById('grid-radius-slider');
+    const radiusDisplay = document.getElementById('grid-radius-value');
+    
+    // Handle radius slider if it exists
+    if (radiusSlider) {
+        radiusSlider.addEventListener('input', () => {
+            gameState.gridSpotlightRadius = parseInt(radiusSlider.value);
+            if (radiusDisplay) {
+                radiusDisplay.textContent = gameState.gridSpotlightRadius;
+            }
+        });
+    }
+    
+    mapContainer.addEventListener('mousemove', (e) => {
+        const rect = mapContainer.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        const radius = gameState.gridSpotlightRadius;
+        
+        // Update mask with adjustable radius
+        const maskGradient = `radial-gradient(
+            circle at ${x}% ${y}%,
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 0.8) ${radius * 0.66}px,
+            rgba(0, 0, 0, 0.5) ${radius * 1.33}px,
+            rgba(0, 0, 0, 0.15) ${radius * 2}px
+        )`;
+        
+        mapContainer.style.setProperty('--mask-gradient', maskGradient);
     });
 }
 
